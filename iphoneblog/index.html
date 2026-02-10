@@ -265,7 +265,7 @@
                 </blockquote>
                 <p></p>
                 <p>If you use an iPhone and are tired of ads, this article is for you.</p>
-                <p>iPhone users from Canada are rushing to install this new app that <strong>instantly blocks ads and popup windows.</strong></p>
+                <p>iPhone users from <span id="user-location">  </span> are rushing to install this new app that <strong>instantly blocks ads and popup windows.</strong></p>
                 <p>Currently, it's difficult to watch a video, browse a news site, or shop online without being bombarded with ads.</p>
                 <p><strong>These ads slow down your phone and represent 80% of your data usage.</strong></p>
                 <p>You might also be tired of seeing ads for months for a product you searched for once on Amazon or eBay…</p>
@@ -337,5 +337,64 @@
             </div> -->
         </footer>
     </div>
+    <script>
+        // Detect user's location and update the text
+        (function() {
+            const locationElement = document.getElementById('user-location');
+            if (!locationElement) return;
+
+            // Use geojs.io which supports CORS (primary method)
+            fetch('https://get.geojs.io/v1/ip/country.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.name) {
+                        locationElement.textContent = data.name;
+                    } else {
+                        locationElement.textContent = 'the United States';
+                    }
+                })
+                .catch(err => {
+                    // Fallback: try ip-api.com with JSONP
+                    const callbackName = 'geoCallback_' + Date.now();
+                    const script = document.createElement('script');
+                    script.src = 'https://ip-api.com/json/?callback=' + callbackName;
+                    
+                    window[callbackName] = function(data) {
+                        delete window[callbackName];
+                        if (script.parentNode) {
+                            document.body.removeChild(script);
+                        }
+                        if (data && data.country) {
+                            locationElement.textContent = data.country;
+                        } else {
+                            locationElement.textContent = 'the United States';
+                        }
+                    };
+                    
+                    script.onerror = function() {
+                        delete window[callbackName];
+                        if (script.parentNode) {
+                            document.body.removeChild(script);
+                        }
+                        locationElement.textContent = 'the United States';
+                    };
+                    
+                    document.body.appendChild(script);
+                    
+                    // Timeout after 5 seconds
+                    setTimeout(() => {
+                        if (window[callbackName]) {
+                            delete window[callbackName];
+                            if (script.parentNode) {
+                                document.body.removeChild(script);
+                            }
+                            if (locationElement.textContent.trim() === '') {
+                                locationElement.textContent = 'the United States';
+                            }
+                        }
+                    }, 5000);
+                });
+        })();
+    </script>
 </body>
 </html>
