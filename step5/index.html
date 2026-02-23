@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Quiz | Guardio - Step 5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #171717;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            width: 100%;
+        }
+
+        .header-top {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            padding: 20px;
+            height: 60px;
+            color: #A9A9A9;
+        }
+
+        @media (min-width: 1024px) {
+            .header-top {
+                padding: 0 36px;
+                height: 69px;
+                color: #88827F;
+            }
+        }
+
+        .back-button {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: flex-start;
+            padding-right: 32px;
+            cursor: pointer;
+        }
+
+        .back-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .back-button svg {
+            width: 30px;
+            height: 30px;
+            color: #6b7280;
+        }
+
+        .step-indicator {
+            display: flex;
+            width: 100%;
+        }
+
+        .step-text {
+            margin-left: auto;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .progress-bar-container {
+            background-color: #EBEAEA;
+            height: 3px;
+            width: 100%;
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .progress-bar-container {
+                display: block;
+            }
+        }
+
+        .progress-bar {
+            background-color: #0245D8;
+            height: 100%;
+            transition: width 0.3s ease;
+            width: 28.5714%;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .quiz-content {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 32px;
+        }
+
+        .question-container {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            height: auto;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+
+        @media (min-width: 1024px) {
+            .question-container {
+                margin-top: 72px;
+                height: 128px;
+                width: 580px;
+            }
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            padding-bottom: 12px;
+            line-height: 135%;
+            color: #333333;
+        }
+
+        @media (min-width: 1024px) {
+            h1 {
+                font-size: 32px;
+                line-height: 140%;
+            }
+        }
+
+        h2 {
+            margin-bottom: 16px;
+            color: #999999;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        @media (min-width: 1024px) {
+            h2 {
+                font-size: 20px;
+                line-height: 133%;
+            }
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 100%;
+            padding: 28px 0 16px;
+        }
+
+        @media (min-width: 1024px) {
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+                width: auto;
+                align-items: center;
+            }
+            .options-grid.radio-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                min-width: 100px;
+            }
+        }
+
+        .option-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 100%;
+        }
+
+        .option-card {
+            background-color: #ffffff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            position: relative;
+            display: flex;
+            height: 150px;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 8px;
+            border: 2px solid #C4C4C4;
+            padding: 30px 8px 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #171717;
+            transition: all 0.2s ease;
+        }
+
+        @media (min-width: 1024px) {
+            .option-card {
+                height: 88px;
+                width: 400px;
+                flex-direction: row;
+                align-items: center;
+                border-radius: 12px;
+                box-shadow: none;
+                padding: 23px;
+                font-size: 20px;
+            }
+        }
+
+        .option-card.selected {
+            border-color: #0245D8;
+            color: #0245D8;
+        }
+
+        @media (min-width: 1024px) {
+            .option-card.selected {
+                border-width: 3px;
+            }
+            .option-card:not(.selected) {
+                border-width: 2px;
+            }
+        }
+
+        .option-icon {
+            padding-bottom: 12px;
+            width: 48px;
+            height: 48px;
+        }
+
+        @media (min-width: 1024px) {
+            .option-icon {
+                padding-bottom: 0;
+                margin-right: 16px;
+                width: 64px;
+                height: 64px;
+            }
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .check-icon-mobile {
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            width: 24px;
+            height: 24px;
+            background-color: #0245D8;
+            border-radius: 4px;
+            color: white;
+            display: none;
+        }
+
+        .option-card.selected .check-icon-mobile {
+            display: block;
+        }
+
+        @media (min-width: 1024px) {
+            .check-icon-mobile {
+                display: none !important;
+            }
+        }
+
+        .check-icon-desktop {
+            display: none;
+            width: 24px;
+            height: 24px;
+            background-color: #0245D8;
+            border-radius: 4px;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+        }
+
+        @media (min-width: 1024px) {
+            .check-icon-desktop {
+                display: none;
+            }
+        }
+
+        .unselected-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 2px solid #C4C4C4;
+            background-color: #DEDCDC;
+            margin-left: auto;
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .unselected-icon {
+                display: block;
+            }
+        }
+
+        .option-card.selected .unselected-icon {
+            display: none;
+        }
+
+        .option-card.selected .check-icon-desktop {
+            display: flex !important;
+        }
+
+        .footer {
+            width: 100vw;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 20px 32px 32px;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        .continue-button {
+            display: flex;
+            height: 56px;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            background-color: rgb(37, 99, 235);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .continue-button:hover {
+            background-color: rgb(29, 78, 216);
+        }
+
+        .continue-button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        @media (min-width: 1024px) {
+            .continue-button {
+                height: 52px;
+                width: 336px;
+                border-radius: 9999px;
+                font-size: 20px;
+            }
+        }
+
+        .icon-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .check-icon-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Image answer styles */
+        .image-answer-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px 0;
+        }
+
+        @media (min-width: 1024px) {
+            .image-answer-container {
+                flex-direction: row;
+                gap: 32px;
+                max-width: 1000px;
+                justify-content: center;
+            }
+        }
+
+        .image-answer-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        @media (min-width: 1024px) {
+            .image-answer-button {
+                width: auto;
+                flex: 1;
+                max-width: 45%;
+            }
+        }
+
+        .image-answer-wrapper {
+            position: relative;
+            transition: all 0.2s ease;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .image-answer-wrapper.selected {
+            border-color: #0245D8;
+            box-shadow: 0 0 0 2px rgba(2, 69, 216, 0.2);
+        }
+
+        .image-answer-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-answer-label {
+            background-color: #ffffff;
+            border: 2px solid #C4C4C4;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #171717;
+            margin: 12px auto 0;
+            transition: all 0.2s ease;
+        }
+
+        .image-answer-wrapper.selected + .image-answer-label,
+        .image-answer-button:has(.image-answer-wrapper.selected) .image-answer-label {
+            border-color: #0245D8;
+            background-color: #0245D8;
+            color: #ffffff;
+        }
+
+        /* Radio button style for simple text options */
+        .radio-option-card {
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            height: auto;
+            min-height: 60px;
+            min-width: 200px;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 8px;
+            border: 2px solid #C4C4C4;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #171717;
+            transition: all 0.2s ease;
+        }
+
+        @media (min-width: 1024px) {
+            .radio-option-card {
+                padding: 20px 24px;
+                font-size: 18px;
+                min-height: 70px;
+                min-width: 300px;
+            }
+            .options-grid.radio-grid {
+                grid-template-columns: 1fr;
+                max-width: 900px;
+            }
+        }
+
+        .radio-option-card.selected {
+            border-color: #0245D8;
+            color: #0245D8;
+        }
+
+        .radio-option-text {
+            flex: 1;
+            margin-right: 30px;
+        }
+
+        .radio-button {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #C4C4C4;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .radio-option-card.selected .radio-button {
+            border-color: #0245D8;
+            background-color: #0245D8;
+        }
+
+        .radio-button-inner {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            display: none;
+        }
+
+        .radio-option-card.selected .radio-button-inner {
+            display: block;
+        }
+
+        .footer.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <div class="back-button" id="backButton" onclick="goToPreviousStep()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8L2 12L6 16"></path>
+                        <path d="M2 12H22"></path>
+                    </svg>
+                </div>
+                <div class="step-indicator">
+                    <p class="step-text">Step 5 of 7</p>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 71.4286%;"></div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="quiz-content">
+                <div class="question-container">
+                    <h1>Which device do you usually use to shop online?</h1>
+                    <h2></h2>
+                </div>
+
+                <div class="options-grid radio-grid" id="optionsGrid">
+                    <!-- Options are generated dynamically by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="footer hidden">
+            <button type="button" class="continue-button" id="continueButton" disabled>
+                <span>Continue</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const PRODUCT_URL = 'https://your-product-url.com';
+        const CURRENT_STEP = 5;
+        const TOTAL_STEPS = 7;
+        const NEXT_STEP_URL = '../step6/index.html';
+        const PREV_STEP_URL = '../step4/index.html';
+        
+        const stepData = {
+            step: 5,
+            type: "radio",
+            title: "Which device do you usually use to shop online?",
+            subtitle: "",
+            options: [
+                { id: "device_desktop", text: "Desktop" },
+                { id: "device_mobile", text: "Mobile" },
+                { id: "device_both", text: "Both" }
+            ]
+        };
+
+        let selectedOptions = new Set();
+
+        function init() {
+            renderOptions();
+            updateProgress();
+        }
+
+        function renderOptions() {
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            
+            const savedAnswers = JSON.parse(localStorage.getItem('quizAnswers') || '{}');
+            const previousAnswers = savedAnswers[CURRENT_STEP] || [];
+            selectedOptions.clear();
+            
+            stepData.options.forEach(option => {
+                const isSelected = previousAnswers.includes(option.id);
+                if (isSelected) {
+                    selectedOptions.add(option.id);
+                }
+
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.type = 'button';
+                button.dataset.option = option.id;
+                
+                button.innerHTML = `
+                    <div class="radio-option-card ${isSelected ? 'selected' : ''}">
+                        <span class="radio-option-text">${option.text}</span>
+                        <div class="radio-button">
+                            <div class="radio-button-inner"></div>
+                        </div>
+                    </div>
+                `;
+
+                button.addEventListener('click', () => {
+                    // Deselect all others
+                    selectedOptions.clear();
+                    stepData.options.forEach(opt => {
+                        const otherButton = document.querySelector(`[data-option="${opt.id}"]`);
+                        if (otherButton) {
+                            const otherCard = otherButton.querySelector('.radio-option-card');
+                            otherCard.classList.remove('selected');
+                        }
+                    });
+                    
+                    // Select this option
+                    const card = button.querySelector('.radio-option-card');
+                    selectedOptions.add(option.id);
+                    card.classList.add('selected');
+                    
+                    // Auto-advance
+                    saveAnswer();
+                    setTimeout(() => {
+                        window.location.href = NEXT_STEP_URL;
+                    }, 300);
+                });
+                optionsGrid.appendChild(button);
+            });
+        }
+
+        function goToNextStep() {
+            if (selectedOptions.size === 0) return;
+            saveAnswer();
+            window.location.href = NEXT_STEP_URL;
+        }
+
+        function goToPreviousStep() {
+            saveAnswer();
+            window.location.href = PREV_STEP_URL;
+        }
+
+        function saveAnswer() {
+            const savedAnswers = JSON.parse(localStorage.getItem('quizAnswers') || '{}');
+            savedAnswers[CURRENT_STEP] = Array.from(selectedOptions);
+            localStorage.setItem('quizAnswers', JSON.stringify(savedAnswers));
+        }
+
+        function updateProgress() {
+            const progress = (CURRENT_STEP / TOTAL_STEPS) * 100;
+            document.querySelector('.progress-bar').style.width = progress + '%';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+        });
+    </script>
+</body>
+</html>
+

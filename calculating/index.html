@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculating Your Score | Guardio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #171717;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .envelope-container {
+            margin-bottom: 40px;
+            position: relative;
+            width: 200px;
+            height: 150px;
+        }
+
+        .envelope {
+            width: 200px;
+            height: 150px;
+            background-color: #B3D9FF;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-top: 60px solid #9BC4E8;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .envelope-content {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 100px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #FF4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .main-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #171717;
+            margin-bottom: 60px;
+            line-height: 1.4;
+        }
+
+        @media (min-width: 1024px) {
+            .main-text {
+                font-size: 32px;
+            }
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        @media (min-width: 1024px) {
+            .progress-text {
+                font-size: 16px;
+            }
+        }
+
+        .progress-bar-wrapper {
+            width: 100%;
+            height: 8px;
+            background-color: #EBEAEA;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #0245D8;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+            animation: progressAnimation 3s ease-in-out forwards;
+        }
+
+        @keyframes progressAnimation {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 66.67%;
+            }
+        }
+
+        .feature-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .feature-screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Bell icon styles */
+        .bell-container {
+            margin-bottom: 40px;
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .bell {
+            width: 80px;
+            height: 80px;
+            background-color: #B3D9FF;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bell-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #0245D8;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+        }
+
+        .bell-icon::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 8px;
+            background-color: #0245D8;
+            border-radius: 4px;
+        }
+
+        .bell-lines {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+        }
+
+        .bell-line {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background-color: #0245D8;
+            border-radius: 1px;
+        }
+
+        .bell-line:nth-child(1) {
+            left: 20px;
+            animation: ring1 1s ease-in-out infinite;
+        }
+
+        .bell-line:nth-child(2) {
+            left: 50%;
+            transform: translateX(-50%);
+            animation: ring2 1s ease-in-out infinite 0.1s;
+        }
+
+        .bell-line:nth-child(3) {
+            right: 20px;
+            animation: ring3 1s ease-in-out infinite 0.2s;
+        }
+
+        @keyframes ring1 {
+            0%, 100% {
+                transform: translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(-2px) rotate(-5deg);
+            }
+            75% {
+                transform: translateX(2px) rotate(5deg);
+            }
+        }
+
+        @keyframes ring2 {
+            0%, 100% {
+                transform: translateX(-50%) rotate(0deg);
+            }
+            25% {
+                transform: translateX(calc(-50% - 2px)) rotate(-5deg);
+            }
+            75% {
+                transform: translateX(calc(-50% + 2px)) rotate(5deg);
+            }
+        }
+
+        @keyframes ring3 {
+            0%, 100% {
+                transform: translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(-2px) rotate(-5deg);
+            }
+            75% {
+                transform: translateX(2px) rotate(5deg);
+            }
+        }
+
+        /* Text messages styles */
+        .messages-container {
+            margin-bottom: 40px;
+            position: relative;
+            width: 200px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .message-bubble {
+            width: 140px;
+            height: 40px;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+        }
+
+        .message-bubble.blue {
+            background-color: #B3D9FF;
+            margin-left: 0;
+        }
+
+        .message-bubble.orange {
+            background-color: #FFB366;
+            margin-left: 40px;
+        }
+
+        .message-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .message-bubble.blue .message-dot {
+            background-color: #0245D8;
+        }
+
+        .message-bubble.orange .message-dot {
+            background-color: #FF6600;
+        }
+
+        .message-line {
+            height: 3px;
+            border-radius: 2px;
+            flex: 1;
+        }
+
+        .message-bubble.blue .message-line {
+            background-color: #0245D8;
+        }
+
+        .message-bubble.orange .message-line {
+            background-color: #FF6600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Screen 1: Bell with alerts -->
+        <div class="feature-screen active" id="screen1">
+            <div class="bell-container">
+                <div class="bell-lines">
+                    <div class="bell-line"></div>
+                    <div class="bell-line"></div>
+                    <div class="bell-line"></div>
+                </div>
+                <div class="bell">
+                    <div class="bell-icon"></div>
+                </div>
+            </div>
+            <h1 class="main-text">Get immediate alerts when<br>your data is leaked</h1>
+        </div>
+
+        <!-- Screen 2: Envelope with warning -->
+        <div class="feature-screen" id="screen2">
+            <div class="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-content">
+                        <div class="warning-icon">!</div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="main-text">Flag malicious emails<br>that land in your Inbox</h1>
+        </div>
+
+        <!-- Screen 3: Text messages -->
+        <div class="feature-screen" id="screen3">
+            <div class="messages-container">
+                <div class="message-bubble blue">
+                    <div class="message-dot"></div>
+                    <div class="message-line"></div>
+                </div>
+                <div class="message-bubble orange">
+                    <div class="message-dot"></div>
+                    <div class="message-line"></div>
+                </div>
+                <div class="message-bubble blue">
+                    <div class="message-dot"></div>
+                    <div class="message-line"></div>
+                </div>
+            </div>
+            <h1 class="main-text">Filter out scam and phishing<br>text messages</h1>
+        </div>
+
+        <div class="progress-container">
+            <p class="progress-text">Calculation your exposure level...</p>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUMMARY_URL = '../summary/index.html';
+        
+        // Cycle through feature screens
+        const screens = ['screen1', 'screen2', 'screen3'];
+        let currentScreen = 0;
+        
+        function showNextScreen() {
+            // Hide current screen
+            document.getElementById(screens[currentScreen]).classList.remove('active');
+            
+            // Move to next screen
+            currentScreen = (currentScreen + 1) % screens.length;
+            
+            // Show next screen
+            document.getElementById(screens[currentScreen]).classList.add('active');
+        }
+        
+        // Change screen every 1 second
+        const screenInterval = setInterval(showNextScreen, 1000);
+        
+        // Redirect to summary page after calculation animation completes
+        setTimeout(() => {
+            clearInterval(screenInterval);
+            window.location.href = SUMMARY_URL;
+        }, 3500); // 3.5 seconds to allow animation to complete
+    </script>
+</body>
+</html>
+
