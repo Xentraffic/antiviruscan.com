@@ -583,7 +583,16 @@
         const TOTAL_STEPS = 7;
         const NEXT_STEP_URL = '../step6/index.html';
         const PREV_STEP_URL = '../step4/index.html';
-        
+
+        function urlWithParams(url) {
+            var qs = window.location.search || '';
+            if (!qs) return url;
+            return url + (url.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
+        }
+        function persistTrackingParams() {
+            if (window.location.search) try { sessionStorage.setItem('trackingParams', window.location.search); } catch (e) {}
+        }
+
         const stepData = {
             step: 5,
             type: "radio",
@@ -649,8 +658,9 @@
                     
                     // Auto-advance
                     saveAnswer();
+                    persistTrackingParams();
                     setTimeout(() => {
-                        window.location.href = NEXT_STEP_URL;
+                        window.location.href = urlWithParams(NEXT_STEP_URL);
                     }, 300);
                 });
                 optionsGrid.appendChild(button);
@@ -660,12 +670,13 @@
         function goToNextStep() {
             if (selectedOptions.size === 0) return;
             saveAnswer();
-            window.location.href = NEXT_STEP_URL;
+            persistTrackingParams();
+            window.location.href = urlWithParams(NEXT_STEP_URL);
         }
 
         function goToPreviousStep() {
             saveAnswer();
-            window.location.href = PREV_STEP_URL;
+            window.location.href = urlWithParams(PREV_STEP_URL);
         }
 
         function saveAnswer() {

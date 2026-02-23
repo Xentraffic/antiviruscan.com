@@ -578,12 +578,20 @@
     </div>
 
     <script>
-        const PRODUCT_URL = 'https://your-product-url.com';
         const CURRENT_STEP = 7;
         const TOTAL_STEPS = 7;
         const PREV_STEP_URL = '../step6/index.html';
         const CALCULATING_URL = '../calculating/index.html';
-        
+
+        function urlWithParams(url) {
+            var qs = window.location.search || '';
+            if (!qs) return url;
+            return url + (url.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
+        }
+        function persistTrackingParams() {
+            if (window.location.search) try { sessionStorage.setItem('trackingParams', window.location.search); } catch (e) {}
+        }
+
         const stepData = {
             step: 7,
             type: "radio",
@@ -649,8 +657,9 @@
                     
                     // Auto-advance to calculating page (last step)
                     saveAnswer();
+                    persistTrackingParams();
                     setTimeout(() => {
-                        window.location.href = CALCULATING_URL;
+                        window.location.href = urlWithParams(CALCULATING_URL);
                     }, 300);
                 });
                 optionsGrid.appendChild(button);
@@ -659,7 +668,7 @@
 
         function goToPreviousStep() {
             saveAnswer();
-            window.location.href = PREV_STEP_URL;
+            window.location.href = urlWithParams(PREV_STEP_URL);
         }
 
         function saveAnswer() {

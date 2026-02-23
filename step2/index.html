@@ -580,7 +580,16 @@
         const TOTAL_STEPS = 7;
         const NEXT_STEP_URL = '../step3/index.html';
         const PREV_STEP_URL = '../step1/index.html';
-        
+
+        function urlWithParams(url) {
+            var qs = window.location.search || '';
+            if (!qs) return url;
+            return url + (url.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
+        }
+        function persistTrackingParams() {
+            if (window.location.search) try { sessionStorage.setItem('trackingParams', window.location.search); } catch (e) {}
+        }
+
         const stepData = {
             step: 2,
             type: "card",
@@ -664,12 +673,13 @@
         function goToNextStep() {
             if (selectedOptions.size === 0) return;
             saveAnswer();
-            window.location.href = NEXT_STEP_URL;
+            persistTrackingParams();
+            window.location.href = urlWithParams(NEXT_STEP_URL);
         }
 
         function goToPreviousStep() {
             saveAnswer();
-            window.location.href = PREV_STEP_URL;
+            window.location.href = urlWithParams(PREV_STEP_URL);
         }
 
         function saveAnswer() {

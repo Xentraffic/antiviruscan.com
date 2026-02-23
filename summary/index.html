@@ -125,8 +125,17 @@
         <p class="exposure-label">Your exposure level is:</p>
         <h1 class="exposure-level">High</h1>
         <p class="exposure-description">Your personal information is at significant risk. Protect yourself from data breaches, phishing attacks, and identity theft with comprehensive security protection.</p>
-        <a href="https://get.armorproshield.com/ProtectShield?tid=b65b5d53-59a1-4c19-95b4-34d7d61a9b10&language=en" class="cta-button">Get Protected Now</a>
+        <!-- <a href="https://get.armorproshield.com/ProtectShield?tid=b65b5d53-59a1-4c19-95b4-34d7d61a9b10&language=en" class="cta-button">Get Protected Now</a> -->
+        <a href="https://trk.mrttrck.com/click" id="ctaButton" class="cta-button">Get Protected Now</a>
     </div>
+    <script>
+        (function() {
+            var qs = window.location.search || '';
+            try { if (!qs && sessionStorage.getItem('trackingParams')) qs = sessionStorage.getItem('trackingParams'); } catch (e) {}
+            var cta = document.getElementById('ctaButton');
+            if (cta && qs) cta.href = cta.href + (cta.href.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
+        })();
+    </script>
 </body>
 </html>
 

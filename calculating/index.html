@@ -400,7 +400,13 @@
 
     <script>
         const SUMMARY_URL = '../summary/index.html';
-        
+
+        function urlWithParams(url) {
+            var qs = window.location.search || '';
+            if (!qs) return url;
+            return url + (url.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
+        }
+
         // Cycle through feature screens
         const screens = ['screen1', 'screen2', 'screen3'];
         let currentScreen = 0;
@@ -422,7 +428,7 @@
         // Redirect to summary page after calculation animation completes
         setTimeout(() => {
             clearInterval(screenInterval);
-            window.location.href = SUMMARY_URL;
+            window.location.href = urlWithParams(SUMMARY_URL);
         }, 3500); // 3.5 seconds to allow animation to complete
     </script>
 </body>
