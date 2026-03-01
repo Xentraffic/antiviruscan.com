@@ -686,6 +686,8 @@
         function updateContinueButton() {
             const continueButton = document.getElementById('continueButton');
             continueButton.disabled = selectedOptions.size === 0;
+            const footer = document.querySelector('.footer');
+            if (footer && selectedOptions.size > 0) footer.classList.remove('hidden');
         }
 
         function goToNextStep() {

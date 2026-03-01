@@ -627,6 +627,7 @@
         function init() {
             renderOptions();
             updateProgress();
+            if (selectedOptions.size > 0) enableContinue();
         }
 
         function renderOptions() {

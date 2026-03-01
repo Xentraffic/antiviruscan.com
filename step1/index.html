@@ -702,6 +702,8 @@
             clearStaleAnswers();
             renderOptions();
             updateProgress();
+            // Show continue button if answer already selected (e.g. back navigation)
+            if (selectedOptions.size > 0) enableContinue();
         }
 
         function renderOptions() {
