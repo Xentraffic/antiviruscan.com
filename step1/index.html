@@ -342,6 +342,9 @@
         }
 
         .footer {
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
             width: 100vw;
             z-index: 10;
             display: flex;
@@ -548,9 +551,7 @@
             display: block;
         }
 
-        .footer.hidden {
-            display: none;
-        }
+        .footer.hidden { opacity: 1; } /* footer always visible */
 
         /* SMS Card styles - replaces blurry images */
         .sms-card {
@@ -621,6 +622,9 @@
         /* Mobile: sticky continue button + compact spacing */
         @media (max-width: 768px) {
             .footer {
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
                 position: sticky;
                 bottom: 0;
                 left: 0;
@@ -693,7 +697,7 @@
             </div>
         </div>
 
-        <div class="footer hidden">
+        <div class="footer">
             <button type="button" class="continue-button" id="continueButton" disabled onclick="continueToNext()">
                 <span>Continue</span>
             </button>
