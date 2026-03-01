@@ -210,7 +210,81 @@
             background-color: #22c55e;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
         }
-    </style>
+    
+    /* Countdown timer */
+    .timer-bar {
+      background: #ff3b30;
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    #countdown { font-weight: 800; font-size: 16px; }
+    .social-proof {
+      background: #f0f9f0;
+      border: 1px solid #c8e6c9;
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin: 20px 0;
+      text-align: center;
+      font-size: 14px;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+    .stars { color: #f4a623; font-size: 18px; margin-right: 6px; }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px 28px;
+      max-width: 420px;
+      width: 92%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .modal-icon { font-size: 48px; margin-bottom: 12px; }
+    .modal h2 { font-size: 22px; margin-bottom: 8px; color: #1a1a1a; }
+    .modal p { font-size: 15px; color: #555; margin-bottom: 20px; }
+    .modal input[type="email"] {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    .modal input[type="email"]:focus { border-color: #4caf50; }
+    .modal-btn {
+      width: 100%;
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .modal-skip { display: block; margin-top: 12px; font-size: 13px; color: #999; cursor: pointer; text-decoration: underline; }
+    .modal-close { position: absolute; top: 12px; right: 16px; font-size: 22px; cursor: pointer; color: #aaa; }
+    .privacy-note { font-size: 11px; color: #bbb; margin-top: 10px; }
+
+  </style>
 
   <!-- Meta Pixel Code | Prelander: antiviruscan.com -->
   <script>
@@ -251,6 +325,8 @@
         <!-- Title -->
         <div class="container">
             <h1 class="entry-title"><a href="https://trk.mrttrck.com/click" target="_blank" rel="noopener" onclick="fbq('track', 'Lead')">iPhone Users Can Finally Block Intrusive Ads and Browse Faster…</a></h1>
+      <div class="social-proof"><span class="stars">★★★★★</span> Rated 4.8/5 by <strong>23,400+ users</strong> protected this month</div>
+
         </div>
 
         <!-- Author line -->
@@ -415,5 +491,72 @@
                 });
         })();
     </script>
+
+  <!-- Countdown -->
+  <div class="timer-bar">🔒 Special offer expires in <span id="countdown">15:00</span> — Secure your device now</div>
+
+  <!-- Email modal -->
+  <div id="email-modal" class="modal-overlay">
+    <div class="modal">
+      <span class="modal-close" onclick="closeModal()">×</span>
+      <div class="modal-icon">🛡️</div>
+      <h2>One last step to protect your device</h2>
+      <p>Enter your email to receive your protection confirmation and account access.</p>
+      <input type="email" id="modal-email-input" placeholder="your@email.com" autocomplete="email" />
+      <button class="modal-btn" onclick="submitEmail()">Get Protected Now →</button>
+      <span class="modal-skip" onclick="skipEmail()">Skip and continue without email</span>
+      <p class="privacy-note">🔒 Your email is safe. We never share your data.</p>
+    </div>
+  </div>
+
+  <script>
+    function getRedTrackUrl(email) {
+      var params = new URLSearchParams(window.location.search);
+      var base = 'https://trk.mrttrck.com/69a3266550d2ee6cc30fca6f';
+      var qs = '?sub1=' + encodeURIComponent(params.get('sub1')||'') +
+               '&sub2=' + encodeURIComponent(params.get('sub2')||'') +
+               '&sub3=' + encodeURIComponent(params.get('sub3')||'') +
+               '&sub4=' + encodeURIComponent(params.get('sub4')||'') +
+               '&sub5=' + encodeURIComponent(params.get('sub5')||'');
+      if (email) qs += '&email=' + encodeURIComponent(email);
+      return base + qs;
+    }
+    function openModal() { document.getElementById('email-modal').classList.add('active'); setTimeout(function(){document.getElementById('modal-email-input').focus()},100); }
+    function closeModal() { document.getElementById('email-modal').classList.remove('active'); }
+    function submitEmail() {
+      var email = document.getElementById('modal-email-input').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('modal-email-input').style.borderColor='#f44336'; return;
+      }
+      fbq('track', 'Lead', {content_name: 'ArmorProShield'});
+      closeModal();
+      window.open(getRedTrackUrl(email), '_blank', 'noopener');
+    }
+    function skipEmail() {
+      fbq('track', 'Lead', {content_name: 'ArmorProShield'});
+      closeModal();
+      window.open(getRedTrackUrl(''), '_blank', 'noopener');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Intercept all CTA links
+      document.querySelectorAll('a[href*="trk.mrttrck"]').forEach(function(el) {
+        el.addEventListener('click', function(e) { e.preventDefault(); openModal(); });
+      });
+      document.getElementById('modal-email-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') submitEmail();
+      });
+      // Countdown
+      var seconds = 15 * 60;
+      var timerEl = document.getElementById('countdown');
+      if (timerEl) {
+        setInterval(function() {
+          seconds = Math.max(0, seconds - 1);
+          var m = Math.floor(seconds/60), s = seconds%60;
+          timerEl.textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+        }, 1000);
+      }
+    });
+  </script>
+
 </body>
 </html>
