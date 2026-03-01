@@ -551,6 +551,73 @@
         .footer.hidden {
             display: none;
         }
+
+        /* SMS Card styles - replaces blurry images */
+        .sms-card {
+            background: #f5f5f7;
+            border-radius: 16px;
+            padding: 16px;
+            font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, sans-serif;
+            width: 100%;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-align: left;
+        }
+        .sms-card.selected {
+            border-color: #0245D8;
+            background: #f0f4ff;
+            box-shadow: 0 0 0 2px rgba(2, 69, 216, 0.15);
+        }
+        .sms-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #d0d0d0;
+        }
+        .sms-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 17px; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .sms-sender-name { font-size: 15px; font-weight: 700; color: #1c1c1e; }
+        .sms-time { font-size: 13px; color: #8e8e93; margin-left: auto; white-space: nowrap; }
+        .sms-bubble {
+            background: #e9e9eb;
+            border-radius: 18px 18px 18px 4px;
+            padding: 12px 16px;
+            font-size: 16px;
+            color: #1c1c1e;
+            line-height: 1.5;
+            display: inline-block;
+            max-width: 95%;
+        }
+        .sms-link { color: #007aff; word-break: break-all; }
+        .answer-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            border: 2px solid #C4C4C4;
+            font-size: 18px;
+            font-weight: 700;
+            color: #171717;
+            margin-top: 12px;
+            float: right;
+        }
+        .sms-card.selected .answer-badge {
+            border-color: #0245D8;
+            background: #0245D8;
+            color: white;
+        }
+        .image-answer-container {
+            gap: 16px !important;
+        }
     </style>
 </head>
 <body>
@@ -624,21 +691,9 @@
         
         const stepData = {
             step: 1,
-            type: "image",
+            type: "sms",
             title: "Which one of these text messages is a scam?",
-            subtitle: "",
-            options: [
-                { 
-                    id: "message_a", 
-                    label: "A",
-                    image: "../Aanswer.webp"
-                },
-                { 
-                    id: "message_b", 
-                    label: "B",
-                    image: "../Banswer.webp"
-                }
-            ]
+            subtitle: ""
         };
 
         let selectedOptions = new Set();
@@ -652,75 +707,76 @@
         function renderOptions() {
             const optionsGrid = document.getElementById('optionsGrid');
             optionsGrid.innerHTML = '';
-            
-            // Restore previous selection from localStorage
+
             const savedAnswers = JSON.parse(localStorage.getItem('quizAnswers') || '{}');
             const previousAnswers = savedAnswers[CURRENT_STEP] || [];
             selectedOptions.clear();
-            
-            stepData.options.forEach(option => {
-                const isSelected = previousAnswers.includes(option.id);
-                if (isSelected) {
-                    selectedOptions.add(option.id);
+
+            const smsOptions = [
+                {
+                    id: 'message_a',
+                    label: 'A',
+                    sender: 'IRS.gov Alert',
+                    avatarColor: '#ff3b30',
+                    avatarLetter: 'I',
+                    time: '10:14 AM',
+                    message: 'URGENT: Your tax refund of $3,247 is pending. Click to claim before it expires:',
+                    link: 'irs-refund-claim.net/verify',
+                    linkColor: '#ff6b6b'
+                },
+                {
+                    id: 'message_b',
+                    label: 'B',
+                    sender: 'Chase Bank',
+                    avatarColor: '#1a56c4',
+                    avatarLetter: 'C',
+                    time: '2:32 PM',
+                    message: 'Your Chase statement is ready. View it at chase.com or in the Chase app.',
+                    link: null
                 }
+            ];
 
-                const button = document.createElement('button');
-                button.className = 'image-answer-button';
-                button.type = 'button';
-                button.dataset.option = option.id;
-                
-                const labelStyle = isSelected 
-                    ? 'border-color: #0245D8; background-color: #0245D8; color: #ffffff;'
-                    : 'border-color: #C4C4C4; background-color: #ffffff; color: #171717;';
-                
-                button.innerHTML = `
-                    <div class="image-answer-wrapper ${isSelected ? 'selected' : ''}">
-                        <img src="${option.image}" alt="Answer ${option.label}">
+            smsOptions.forEach(opt => {
+                const isSelected = previousAnswers.includes(opt.id);
+                if (isSelected) selectedOptions.add(opt.id);
+
+                const card = document.createElement('button');
+                card.className = 'sms-card' + (isSelected ? ' selected' : '');
+                card.type = 'button';
+                card.dataset.option = opt.id;
+                card.innerHTML = \`
+                    <div class="sms-header">
+                        <div class="sms-avatar" style="background:\${opt.avatarColor}">\${opt.avatarLetter}</div>
+                        <div class="sms-sender-name">\${opt.sender}</div>
+                        <div class="sms-time">\${opt.time}</div>
                     </div>
-                    <div class="image-answer-label" style="${labelStyle}">${option.label}</div>
-                `;
+                    <div class="sms-bubble">
+                        \${opt.message}\${opt.link ? ' <span class="sms-link">' + opt.link + '</span>' : ''}
+                    </div>
+                    <div class="answer-badge">\${opt.label}</div>
+                    <div style="clear:both"></div>
+                \`;
 
-                button.addEventListener('click', () => toggleImageOption(option.id, button));
-                optionsGrid.appendChild(button);
-            });
-        }
+                card.addEventListener('click', () => {
+                    // Deselect all
+                    optionsGrid.querySelectorAll('.sms-card').forEach(c => c.classList.remove('selected'));
+                    optionsGrid.querySelectorAll('.answer-badge').forEach(b => {
+                        b.style.borderColor = '#C4C4C4';
+                        b.style.background = '';
+                        b.style.color = '#171717';
+                    });
+                    selectedOptions.clear();
 
-        function toggleImageOption(optionId, buttonElement) {
-            const wrapper = buttonElement.querySelector('.image-answer-wrapper');
-            const label = buttonElement.querySelector('.image-answer-label');
-            
-            // For image type, only one can be selected at a time
-            if (selectedOptions.has(optionId)) {
-                selectedOptions.delete(optionId);
-                wrapper.classList.remove('selected');
-                label.style.borderColor = '#C4C4C4';
-                label.style.backgroundColor = '#ffffff';
-                label.style.color = '#171717';
-            } else {
-                // Deselect all others first
-                selectedOptions.clear();
-                stepData.options.forEach(opt => {
-                    const otherButton = document.querySelector(`[data-option="${opt.id}"]`);
-                    if (otherButton) {
-                        const otherWrapper = otherButton.querySelector('.image-answer-wrapper');
-                        const otherLabel = otherButton.querySelector('.image-answer-label');
-                        otherWrapper.classList.remove('selected');
-                        otherLabel.style.borderColor = '#C4C4C4';
-                        otherLabel.style.backgroundColor = '#ffffff';
-                        otherLabel.style.color = '#171717';
-                    }
+                    // Select this
+                    card.classList.add('selected');
+                    selectedOptions.add(opt.id);
+                    saveAnswer();
+                    persistTrackingParams();
+                    enableContinue();
                 });
-                
-                // Select this one
-                selectedOptions.add(optionId);
-                wrapper.classList.add('selected');
-                label.style.borderColor = '#0245D8';
-                label.style.backgroundColor = '#0245D8';
-                label.style.color = '#ffffff';
-                saveAnswer();
-                persistTrackingParams();
-                enableContinue();
-            }
+
+                optionsGrid.appendChild(card);
+            });
         }
 
         function enableContinue() {
