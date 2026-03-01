@@ -149,17 +149,13 @@
 
         function buildRedirectUrl(email) {
             var p = getParams();
-            var rtBase = 'https://trk.mrttrck.com/699c9791ec0dac2a8c3ce073';
-            var rtQS = '?sub1=' + encodeURIComponent(p.get('sub1')||'') +
-                       '&sub2=' + encodeURIComponent(p.get('sub2')||'') +
-                       '&sub3=' + encodeURIComponent(p.get('sub3')||'') +
-                       '&sub4=' + encodeURIComponent(p.get('sub4')||'') +
-                       '&sub5=' + encodeURIComponent(p.get('sub5')||'');
-            // Preserve RedTrack click ID for conversion attribution
+            // Get the RedTrack click ID set when user first hit step1
             var rtkcid = p.get('rtkcid') || p.get('rtkclickid') || '';
-            if (rtkcid) rtQS += '&rtkcid=' + encodeURIComponent(rtkcid);
-            if (email) rtQS += '&email=' + encodeURIComponent(email);
-            return rtBase + rtQS;
+            // Go directly to the Cliq offer — bypass RedTrack to avoid looping back to step1
+            var offerBase = 'https://trk.armorproshield.com/redirect/l/fd823d79-e5fd-4ca3-844d-e9826794799d/6331656c-17d5-4a29-8630-a2b469660634';
+            var offerQS = '?t1=' + encodeURIComponent(rtkcid);
+            if (email) offerQS += '&email=' + encodeURIComponent(email);
+            return offerBase + offerQS;
         }
 
         function handleCTA() {
