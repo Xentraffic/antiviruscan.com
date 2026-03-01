@@ -697,6 +697,8 @@
         function enableContinue() {
             const btn = document.getElementById('continueButton');
             if (btn) btn.disabled = false;
+            const footer = btn && btn.closest('.footer');
+            if (footer) footer.classList.remove('hidden');
         }
 
         function continueToNext() {
