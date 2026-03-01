@@ -155,6 +155,9 @@
                        '&sub3=' + encodeURIComponent(p.get('sub3')||'') +
                        '&sub4=' + encodeURIComponent(p.get('sub4')||'') +
                        '&sub5=' + encodeURIComponent(p.get('sub5')||'');
+            // Preserve RedTrack click ID for conversion attribution
+            var rtkcid = p.get('rtkcid') || p.get('rtkclickid') || '';
+            if (rtkcid) rtQS += '&rtkcid=' + encodeURIComponent(rtkcid);
             if (email) rtQS += '&email=' + encodeURIComponent(email);
             return rtBase + rtQS;
         }
