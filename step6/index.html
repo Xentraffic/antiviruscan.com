@@ -585,7 +585,7 @@
         </div>
 
         <div class="footer">
-            <button type="button" class="continue-button" id="continueButton" disabled>
+            <button type="button" class="continue-button" id="continueButton" disabled onclick="continueToNext()">
                 <span>Continue</span>
             </button>
         </div>
@@ -689,6 +689,17 @@
 
         function goToNextStep() {
             if (selectedOptions.size === 0) return;
+            saveAnswer();
+            persistTrackingParams();
+            window.location.href = urlWithParams(NEXT_STEP_URL);
+        }
+
+        function enableContinue() {
+            const btn = document.getElementById('continueButton');
+            if (btn) btn.disabled = false;
+        }
+
+        function continueToNext() {
             saveAnswer();
             persistTrackingParams();
             window.location.href = urlWithParams(NEXT_STEP_URL);

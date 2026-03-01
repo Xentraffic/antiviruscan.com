@@ -585,7 +585,7 @@
         </div>
 
         <div class="footer hidden">
-            <button type="button" class="continue-button" id="continueButton" disabled>
+            <button type="button" class="continue-button" id="continueButton" disabled onclick="continueToNext()">
                 <span>Continue</span>
             </button>
         </div>
@@ -603,7 +603,22 @@
             return url + (url.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
         }
         function persistTrackingParams() {
-            if (window.location.search) try { sessionStorage.setItem('trackingParams', window.location.search); } catch (e) {}
+            if (window.location.search) try { sessionStorage.setItem('trackingParams', window.location.search); }
+
+        function clearStaleAnswers() {
+            // Clear saved quiz answers when a new click arrives (new rtkcid)
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var rtkcid = params.get('rtkcid');
+                if (rtkcid) {
+                    var lastRtkcid = sessionStorage.getItem('lastRtkcid');
+                    if (lastRtkcid !== rtkcid) {
+                        localStorage.removeItem('quizAnswers');
+                        sessionStorage.setItem('lastRtkcid', rtkcid);
+                    }
+                }
+            } catch(e) {}
+        } catch (e) {}
         }
         
         const stepData = {
@@ -628,6 +643,7 @@
         let selectedOptions = new Set();
 
         function init() {
+            clearStaleAnswers();
             renderOptions();
             updateProgress();
         }
@@ -701,14 +717,9 @@
                 label.style.backgroundColor = '#0245D8';
                 label.style.color = '#ffffff';
             }
-
-            // Auto-advance after selection
-            if (selectedOptions.size > 0) {
-                saveAnswer();
-                persistTrackingParams();
-                setTimeout(() => {
-                    window.location.href = urlWithParams(NEXT_STEP_URL);
-                }, 300);
+                    saveAnswer();
+                    persistTrackingParams();
+                    enableContinue();
             }
         }
 

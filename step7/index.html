@@ -588,7 +588,7 @@
         </div>
 
         <div class="footer hidden">
-            <button type="button" class="continue-button" id="continueButton" disabled>
+            <button type="button" class="continue-button" id="continueButton" disabled onclick="continueToNext()">
                 <span>Continue</span>
             </button>
         </div>
@@ -672,15 +672,23 @@
                     selectedOptions.add(option.id);
                     card.classList.add('selected');
                     
-                    // Auto-advance to calculating page (last step)
                     saveAnswer();
                     persistTrackingParams();
-                    setTimeout(() => {
-                        window.location.href = urlWithParams(CALCULATING_URL);
-                    }, 300);
+                    enableContinue();
                 });
                 optionsGrid.appendChild(button);
             });
+        }
+
+        function enableContinue() {
+            const btn = document.getElementById('continueButton');
+            if (btn) btn.disabled = false;
+        }
+
+        function continueToNext() {
+            saveAnswer();
+            persistTrackingParams();
+            window.location.href = urlWithParams(CALCULATING_URL);
         }
 
         function goToPreviousStep() {

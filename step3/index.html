@@ -588,7 +588,7 @@
         </div>
 
         <div class="footer hidden">
-            <button type="button" class="continue-button" id="continueButton" disabled>
+            <button type="button" class="continue-button" id="continueButton" disabled onclick="continueToNext()">
                 <span>Continue</span>
             </button>
         </div>
@@ -672,16 +672,23 @@
                     const card = button.querySelector('.radio-option-card');
                     selectedOptions.add(option.id);
                     card.classList.add('selected');
-                    
-                    // Auto-advance
                     saveAnswer();
                     persistTrackingParams();
-                    setTimeout(() => {
-                        window.location.href = urlWithParams(NEXT_STEP_URL);
-                    }, 300);
+                    enableContinue();
                 });
                 optionsGrid.appendChild(button);
             });
+        }
+
+        function enableContinue() {
+            const btn = document.getElementById('continueButton');
+            if (btn) btn.disabled = false;
+        }
+
+        function continueToNext() {
+            saveAnswer();
+            persistTrackingParams();
+            window.location.href = urlWithParams(NEXT_STEP_URL);
         }
 
         function goToPreviousStep() {
