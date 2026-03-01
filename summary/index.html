@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Security Quiz Results | Guardio</title>
+    <title>Your Security Quiz Results | ArmorProShield</title>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -16,19 +16,14 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1222231059973245');
     fbq('track', 'PageView');
-  fbq('track', 'Lead');
+    fbq('track', 'Lead');
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1222231059973245&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #ffffff;
@@ -40,7 +35,6 @@
             justify-content: center;
             padding: 20px;
         }
-
         .container {
             display: flex;
             flex-direction: column;
@@ -50,57 +44,42 @@
             width: 100%;
             text-align: center;
         }
-
-        .percentage {
-            font-size: 72px;
-            font-weight: 700;
-            color: #171717;
-            margin-bottom: 20px;
-            line-height: 1;
+        .percentage { font-size: 72px; font-weight: 700; color: #171717; margin-bottom: 20px; line-height: 1; }
+        .exposure-label { font-size: 18px; font-weight: 500; color: #666666; margin-bottom: 8px; }
+        .exposure-level { font-size: 32px; font-weight: 600; color: #FF4444; margin-bottom: 32px; }
+        .exposure-description {
+            font-size: 16px; font-weight: 400; color: #666666;
+            margin-bottom: 28px; line-height: 1.5; max-width: 500px;
         }
 
-        @media (min-width: 1024px) {
-            .percentage {
-                font-size: 96px;
-            }
+        /* Email capture inline (no modal — best for quiz flow) */
+        .email-capture {
+            width: 100%;
+            max-width: 360px;
+            margin-bottom: 12px;
         }
-
-        .exposure-label {
-            font-size: 18px;
-            font-weight: 500;
-            color: #666666;
-            margin-bottom: 8px;
+        .email-capture input[type="email"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 10px;
+            text-align: center;
+            transition: border-color 0.2s;
         }
-
-        @media (min-width: 1024px) {
-            .exposure-label {
-                font-size: 20px;
-            }
-        }
-
-        .exposure-level {
-            font-size: 32px;
-            font-weight: 600;
-            color: #FF4444;
-            margin-bottom: 60px;
-        }
-
-        @media (min-width: 1024px) {
-            .exposure-level {
-                font-size: 40px;
-            }
-        }
-
+        .email-capture input[type="email"]:focus { border-color: #2563eb; }
         .cta-button {
             display: flex;
             height: 56px;
             width: 100%;
-            max-width: 336px;
+            max-width: 360px;
             align-items: center;
             justify-content: center;
             border-radius: 9999px;
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 600;
             background-color: rgb(37, 99, 235);
             color: #ffffff;
             border: none;
@@ -108,32 +87,28 @@
             transition: background-color 0.2s ease;
             text-decoration: none;
         }
-
-        .cta-button:hover {
-            background-color: rgb(29, 78, 216);
+        .cta-button:hover { background-color: rgb(29, 78, 216); }
+        .skip-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #aaa;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .privacy-note { font-size: 11px; color: #ccc; margin-top: 8px; }
+        .email-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 8px;
         }
 
         @media (min-width: 1024px) {
-            .cta-button {
-                height: 52px;
-                font-size: 20px;
-            }
-        }
-
-        .exposure-description {
-            font-size: 16px;
-            font-weight: 400;
-            color: #666666;
-            margin-bottom: 40px;
-            line-height: 1.5;
-            max-width: 500px;
-        }
-
-        @media (min-width: 1024px) {
-            .exposure-description {
-                font-size: 18px;
-                margin-bottom: 50px;
-            }
+            .percentage { font-size: 96px; }
+            .exposure-label { font-size: 20px; }
+            .exposure-level { font-size: 40px; }
+            .exposure-description { font-size: 18px; margin-bottom: 36px; }
         }
     </style>
 </head>
@@ -142,18 +117,69 @@
         <div class="percentage">88%</div>
         <p class="exposure-label">Your exposure level is:</p>
         <h1 class="exposure-level">High</h1>
-        <p class="exposure-description">Your personal information is at significant risk. Protect yourself from data breaches, phishing attacks, and identity theft with comprehensive security protection.</p>
-        <!-- <a href="https://get.armorproshield.com/ProtectShield?tid=b65b5d53-59a1-4c19-95b4-34d7d61a9b10&language=en" class="cta-button">Get Protected Now</a> -->
-        <a href="https://trk.mrttrck.com/click" onclick="fbq('track', 'Lead')" id="ctaButton" class="cta-button">Get Protected Now</a>
+        <p class="exposure-description">
+            Your personal information is at significant risk. Protect yourself from data breaches,
+            phishing attacks, and identity theft with comprehensive security protection.
+        </p>
+
+        <!-- Email capture before CTA -->
+        <div class="email-capture">
+            <p class="email-label">Enter your email to get protected:</p>
+            <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" />
+        </div>
+
+        <button class="cta-button" id="ctaButton" onclick="handleCTA()">
+            Get Protected Now →
+        </button>
+        <span class="skip-link" onclick="skipEmail()">Continue without email</span>
+        <p class="privacy-note">🔒 We never share your email. Unsubscribe anytime.</p>
     </div>
+
     <script>
-        (function() {
-            var qs = window.location.search || '';
-            try { if (!qs && sessionStorage.getItem('trackingParams')) qs = sessionStorage.getItem('trackingParams'); } catch (e) {}
-            var cta = document.getElementById('ctaButton');
-            if (cta && qs) cta.href = cta.href + (cta.href.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
-        })();
+        // Restore tracking params from sessionStorage (passed through quiz steps)
+        var trackingQS = '';
+        try {
+            trackingQS = window.location.search || sessionStorage.getItem('trackingParams') || '';
+        } catch(e) {}
+
+        function getParams() {
+            var qs = trackingQS || '';
+            try { var p = new URLSearchParams(qs); return p; } catch(e) { return new URLSearchParams(); }
+        }
+
+        function buildRedirectUrl(email) {
+            var p = getParams();
+            var rtBase = 'https://trk.mrttrck.com/69a3266550d2ee6cc30fca6f';
+            var rtQS = '?sub1=' + encodeURIComponent(p.get('sub1')||'') +
+                       '&sub2=' + encodeURIComponent(p.get('sub2')||'') +
+                       '&sub3=' + encodeURIComponent(p.get('sub3')||'') +
+                       '&sub4=' + encodeURIComponent(p.get('sub4')||'') +
+                       '&sub5=' + encodeURIComponent(p.get('sub5')||'');
+            if (email) rtQS += '&email=' + encodeURIComponent(email);
+            return rtBase + rtQS;
+        }
+
+        function handleCTA() {
+            var email = document.getElementById('emailInput').value.trim();
+            var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            if (!valid) {
+                var input = document.getElementById('emailInput');
+                input.style.borderColor = '#ef4444';
+                input.placeholder = 'Please enter a valid email';
+                input.focus();
+                return;
+            }
+            window.location.href = buildRedirectUrl(email);
+        }
+
+        function skipEmail() {
+            window.location.href = buildRedirectUrl('');
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('emailInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleCTA();
+        });
     </script>
 </body>
 </html>
-
