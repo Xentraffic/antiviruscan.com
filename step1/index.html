@@ -744,18 +744,18 @@
                 card.className = 'sms-card' + (isSelected ? ' selected' : '');
                 card.type = 'button';
                 card.dataset.option = opt.id;
-                card.innerHTML = \`
+                card.innerHTML = `
                     <div class="sms-header">
-                        <div class="sms-avatar" style="background:\${opt.avatarColor}">\${opt.avatarLetter}</div>
-                        <div class="sms-sender-name">\${opt.sender}</div>
-                        <div class="sms-time">\${opt.time}</div>
+                        <div class="sms-avatar" style="background:${opt.avatarColor}">${opt.avatarLetter}</div>
+                        <div class="sms-sender-name">${opt.sender}</div>
+                        <div class="sms-time">${opt.time}</div>
                     </div>
                     <div class="sms-bubble">
-                        \${opt.message}\${opt.link ? ' <span class="sms-link">' + opt.link + '</span>' : ''}
+                        ${opt.message}${opt.link ? ' <span class="sms-link">' + opt.link + '</span>' : ''}
                     </div>
-                    <div class="answer-badge">\${opt.label}</div>
+                    <div class="answer-badge">${opt.label}</div>
                     <div style="clear:both"></div>
-                \`;
+                `;
 
                 card.addEventListener('click', () => {
                     // Deselect all
