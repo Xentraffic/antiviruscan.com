@@ -211,19 +211,17 @@
     })();
 
     // RedTrack click URL — read sub params from our landing URL
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
     function getRedTrackUrl(email) {
-      var params = new URLSearchParams(window.location.search);
-      var sub1 = params.get('sub1') || '';
-      var sub2 = params.get('sub2') || '';
-      var sub3 = params.get('sub3') || '';
-      var sub4 = params.get('sub4') || '';
-      var sub5 = params.get('sub5') || '';
-      var base = 'https://trk.mrttrck.com/699c9791ec0dac2a8c3ce073';
-      var qs = '?sub1=' + encodeURIComponent(sub1) +
-               '&sub2=' + encodeURIComponent(sub2) +
-               '&sub3=' + encodeURIComponent(sub3) +
-               '&sub4=' + encodeURIComponent(sub4) +
-               '&sub5=' + encodeURIComponent(sub5);
+      // Go directly to Cliq offer — avoids RT routing back to step1
+      var base = 'https://trk.armorproshield.com/redirect/l/fd823d79-e5fd-4ca3-844d-e9826794799d/6331656c-17d5-4a29-8630-a2b469660634';
+      var qs = '?t1=' + generateUUID();
       if (email) qs += '&email=' + encodeURIComponent(email);
       return base + qs;
     }
