@@ -603,7 +603,8 @@
             return url + (url.indexOf('?') !== -1 ? '&' + qs.slice(1) : qs);
         }
         function persistTrackingParams() {
-            if (window.location.search) try { sessionStorage.setItem('trackingParams', window.location.search); }
+            if (window.location.search) try { sessionStorage.setItem('trackingParams', window.location.search); } catch (e) {}
+        }
 
         function clearStaleAnswers() {
             // Clear saved quiz answers when a new click arrives (new rtkcid)
@@ -618,7 +619,6 @@
                     }
                 }
             } catch(e) {}
-        } catch (e) {}
         }
         
         const stepData = {
@@ -720,6 +720,19 @@
                 persistTrackingParams();
                 enableContinue();
             }
+        }
+
+        function enableContinue() {
+            const btn = document.getElementById('continueButton');
+            if (btn) btn.disabled = false;
+            const footer = document.querySelector('.footer');
+            if (footer) footer.classList.remove('hidden');
+        }
+
+        function continueToNext() {
+            saveAnswer();
+            persistTrackingParams();
+            window.location.href = urlWithParams(NEXT_STEP_URL);
         }
 
         function saveAnswer() {
