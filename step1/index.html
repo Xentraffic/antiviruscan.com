@@ -619,7 +619,7 @@
         .image-answer-container {
             gap: 16px !important;
         }
-        /* Mobile: sticky continue button + compact spacing */
+        
         @media (max-width: 768px) {
             .footer {
             position: sticky;
@@ -662,6 +662,42 @@
             .continue-button {
                 height: 56px !important;
             }
+        }
+        /* MOBILE_COMPACT */
+        @media (max-width: 768px) {
+            .header-top { padding: 12px 16px; height: 48px; }
+            .progress-bar-container { display: block; }
+            .quiz-content { padding: 0 16px 16px; }
+            .question-container { 
+                margin-top: 8px !important; 
+                margin-bottom: 8px !important; 
+                height: auto !important; 
+                padding-bottom: 4px !important; 
+            }
+            h1 { font-size: 20px !important; padding-bottom: 4px !important; }
+            h2 { font-size: 16px !important; }
+            .subtitle { font-size: 14px !important; margin-bottom: 8px !important; }
+            .options-grid { gap: 8px !important; padding: 8px 0 !important; }
+            .image-answer-container { gap: 10px !important; }
+            .radio-option-card { 
+                min-height: 52px !important; 
+                padding: 12px 14px !important;
+                font-size: 17px !important;
+            }
+            .option-card { padding: 12px 14px !important; }
+            .option-card-text { font-size: 16px !important; }
+            .sms-card { padding: 12px !important; margin-bottom: 0 !important; }
+            .sms-sender-name { font-size: 14px !important; }
+            .sms-bubble { font-size: 14px !important; padding: 8px 12px !important; }
+            .footer { 
+                position: fixed !important;
+                bottom: 0; left: 0; right: 0;
+                padding: 10px 16px 24px !important;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
+            .continue-button { height: 52px !important; font-size: 17px !important; }
+            .main-content { padding-bottom: 90px; }
         }
     </style>
 </head>
